@@ -25,12 +25,9 @@ Sistem ini mengintegrasikan seluruh alur kerja klinik mulai dari pendaftaran pas
 <div align="center">
   <h3>✨ Experience the Future of Clinic Management ✨</h3>
   <br/>
-  <a href="./public/demo.mp4">
-    <img src="https://img.shields.io/badge/▶_Putar_Video_Demo-Klik_Disini_untuk_Menonton-red?style=for-the-badge&logo=youtube&logoColor=white" alt="Watch Demo" height="40" />
-  </a>
+  <video src="https://github.com/user-attachments/assets/e38a12e3-21c2-4ea5-9c6e-1296ff59b2d1" controls="controls" style="max-width: 100%; border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.2);"></video>
   <br/>
-  <br/>
-  <p><i>(GitHub tidak mendukung pemutar video langsung. Klik tombol di atas untuk menonton.)</i></p>
+  <p><i>(Tonton video demonstrasi lengkap di atas)</i></p>
 </div>
 
 ---
