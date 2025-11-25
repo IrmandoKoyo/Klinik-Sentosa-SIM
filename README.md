@@ -25,9 +25,12 @@ Sistem ini mengintegrasikan seluruh alur kerja klinik mulai dari pendaftaran pas
 <div align="center">
   <h3>✨ Experience the Future of Clinic Management ✨</h3>
   <br/>
-  <video src="./public/demo.mp4" controls width="100%" style="border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.2);"></video>
+  <a href="./public/demo.mp4">
+    <img src="https://img.shields.io/badge/▶_Putar_Video_Demo-Klik_Disini_untuk_Menonton-red?style=for-the-badge&logo=youtube&logoColor=white" alt="Watch Demo" height="40" />
+  </a>
   <br/>
-  <p><i>(Pastikan file <code>demo.mp4</code> tersedia di folder <code>public</code>)</i></p>
+  <br/>
+  <p><i>(GitHub tidak mendukung pemutar video langsung. Klik tombol di atas untuk menonton.)</i></p>
 </div>
 
 ---
@@ -111,7 +114,7 @@ Dibangun dengan standar industri tertinggi untuk performa dan skalabilitas:
 ### Instalasi
 1.  **Clone Repository**
     ```bash
-    git clone https://github.com/username/klinik-sentosa-sim.git
+    git clone https://github.com/IrmandoKoyo/Klinik-Sentosa-SIM.git
     ```
 2.  **Install Dependencies**
     ```bash
