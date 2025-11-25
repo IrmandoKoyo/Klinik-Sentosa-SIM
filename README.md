@@ -46,15 +46,15 @@ Sistem ini dirancang mengikuti standar operasional medis internasional:
 *   **Diagnosa & Tindakan:** Dokter menginput ICD-10, tanda vital, dan tindakan medis.
 *   **E-Resep:** Resep obat dikirim digital ke farmasi (tanpa kertas).
 
-### 3️⃣ Farmasi (Pharmacy)
-*   **Verifikasi:** Apoteker menerima resep digital secara *real-time*.
-*   **Penyiapan Obat:** Stok obat berkurang otomatis saat disiapkan.
-*   **Penyerahan:** Status pasien berubah menjadi "Siap Bayar" setelah obat diserahkan.
-
-### 4️⃣ Pembayaran (Payment)
+### 3️⃣ Pembayaran (Payment)
 *   **Kasir:** Tagihan muncul otomatis (Jasa Dokter + Tindakan + Obat).
 *   **Pelunasan:** Petugas memproses pembayaran dan mencetak struk resmi.
-*   **Selesai:** Data masuk ke laporan pendapatan harian secara instan.
+*   **Validasi:** Status pasien berubah menjadi "Lunas", siap untuk pengambilan obat.
+
+### 4️⃣ Farmasi (Pharmacy)
+*   **Verifikasi:** Apoteker menerima resep yang sudah dibayar.
+*   **Penyiapan Obat:** Stok obat berkurang otomatis saat disiapkan.
+*   **Penyerahan:** Obat diserahkan kepada pasien dan transaksi selesai sepenuhnya.
 
 ---
 
