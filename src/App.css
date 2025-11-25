@@ -1,0 +1,15 @@
+/* App specific styles */
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Additional utility classes if needed */
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.opacity-90 {
+  opacity: 0.9;
+}
