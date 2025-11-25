@@ -4,7 +4,7 @@ export default {
         "./index.html",
         "./src/**/*.{js,ts,jsx,tsx}",
     ],
-    darkMode: 'selector', // Changed from 'class' to 'selector' for better v4 compatibility
+    darkMode: 'class', // Changed to 'class' for manual toggling
     theme: {
         extend: {},
     },

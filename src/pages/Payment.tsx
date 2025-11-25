@@ -4,7 +4,7 @@ import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 import { Modal } from '../components/ui/Modal';
 import { CreditCard, Check, Printer } from 'lucide-react';
-import { formatCurrency, formatDate } from '../utils/helpers';
+import { formatCurrency, formatDate, getTodayDateString } from '../utils/helpers';
 
 export const Payment: React.FC = () => {
     const { queue, updateQueueItem, addTransaction } = useClinic();
@@ -21,14 +21,15 @@ export const Payment: React.FC = () => {
 
         addTransaction({
             id: `TRX-${Date.now()}`,
-            date: new Date().toISOString().split('T')[0],
+            date: getTodayDateString(),
             patientName: selectedInvoice.name,
             total: selectedInvoice.bill,
             status: 'paid',
             items: selectedInvoice.prescription.map((item: any) => ({
                 name: item.name,
                 qty: item.qty,
-                price: item.price
+                price: item.price,
+                dosage: item.dosage
             })),
             diagnosis: selectedInvoice.diagnosis,
             anamnesa: selectedInvoice.anamnesa,
@@ -36,7 +37,9 @@ export const Payment: React.FC = () => {
             vitalSigns: selectedInvoice.vitalSigns,
             doctorName: selectedInvoice.doctorName,
             time: selectedInvoice.examTime,
-            poli: selectedInvoice.poli
+            poli: selectedInvoice.poli,
+            handledByRoleMismatch: selectedInvoice.handledByRoleMismatch,
+            actualDoctorRole: selectedInvoice.actualDoctorRole
         });
 
         updateQueueItem(selectedInvoice.id, { status: 'pharmacy' });
@@ -73,6 +76,8 @@ export const Payment: React.FC = () => {
                         <p><strong>No. Invoice:</strong> INV-${selectedInvoice.id}</p>
                         <p><strong>Tanggal:</strong> ${new Date().toLocaleDateString()}</p>
                         <p><strong>Pasien:</strong> ${selectedInvoice.name}</p>
+                        <p><strong>Dokter:</strong> ${selectedInvoice.doctorName} (${selectedInvoice.poli})</p>
+                        ${selectedInvoice.handledByRoleMismatch ? `<p style="color: red; font-weight: bold; font-size: 0.8em;">⚠ DITANGANI DOKTER ${selectedInvoice.actualDoctorRole}</p>` : ''}
                     </div>
                     <table>
                         <thead>

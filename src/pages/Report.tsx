@@ -1,38 +1,106 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useClinic } from '../context/ClinicContext';
 import { Card } from '../components/ui/Card';
+import { Button } from '../components/ui/Button';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
-import { TrendingUp, Users, DollarSign, Calendar } from 'lucide-react';
+import { TrendingUp, Users, DollarSign, Calendar, Printer, Search } from 'lucide-react';
 import { formatCurrency } from '../utils/helpers';
 import { db, COLLECTIONS } from '../lib/firebase';
 import { doc, deleteDoc } from 'firebase/firestore';
 
 export const Report: React.FC = () => {
     const { transactions } = useClinic();
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
+
+    // Filter transactions for printing
+    const filteredTransactions = useMemo(() => {
+        if (!startDate || !endDate) return transactions;
+        return transactions.filter(t => {
+            // Assuming t.date is YYYY-MM-DD
+            return t.date >= startDate && t.date <= endDate;
+        });
+    }, [transactions, startDate, endDate]);
+
+    const handlePrint = () => {
+        const printWindow = window.open('', '_blank');
+        if (printWindow) {
+            printWindow.document.write(`
+                <html>
+                <head>
+                    <title>Laporan Transaksi</title>
+                    <style>
+                        body { font-family: sans-serif; padding: 20px; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; font-size: 12px; }
+                        th { background-color: #f2f2f2; }
+                        .header { text-align: center; margin-bottom: 20px; }
+                        .total { font-weight: bold; text-align: right; margin-top: 10px; }
+                        @media print {
+                            .no-print { display: none; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h2>KLINIK SENTOSA</h2>
+                        <p>Laporan Transaksi</p>
+                        <p>Periode: ${startDate || 'Semua'} s/d ${endDate || 'Semua'}</p>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tanggal</th>
+                                <th>Pasien</th>
+                                <th>Dokter</th>
+                                <th>Poli</th>
+                                <th>Diagnosa</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${filteredTransactions.map(t => `
+                                <tr>
+                                    <td>${t.date}</td>
+                                    <td>${t.patientName}</td>
+                                    <td>${t.doctorName || '-'}</td>
+                                    <td>${t.poli || '-'}</td>
+                                    <td>${t.diagnosis || '-'}</td>
+                                    <td>${formatCurrency(t.total)}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                    <div class="total">
+                        Total Pendapatan: ${formatCurrency(filteredTransactions.reduce((acc, t) => acc + t.total, 0))}
+                    </div>
+                    <script>
+                        window.onload = function() { window.print(); }
+                    </script>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+        }
+    };
 
     // Aggregate Data for Charts
     const { revenueData, visitData, totalRevenue, totalVisits, avgDailyVisits } = useMemo(() => {
+        // ... (existing aggregation logic) ...
         const revMap = new Map<string, number>();
         const visitMap = new Map<string, number>();
         let totalRev = 0;
 
         transactions.forEach(t => {
-            // Assuming transaction has a 'date' field or we use 'timestamp'
-            // For now, let's assume 'date' string YYYY-MM-DD exists or we parse timestamp
-            // If transaction doesn't have date, we might need to add it or use a default
             const date = t.date || new Date().toISOString().split('T')[0];
-
-            // Revenue
             const currentRev = revMap.get(date) || 0;
             revMap.set(date, currentRev + t.total);
             totalRev += t.total;
 
-            // Visits (1 transaction = 1 visit for simplicity)
             const currentVisits = visitMap.get(date) || 0;
             visitMap.set(date, currentVisits + 1);
         });
 
-        // Convert Maps to Arrays and Sort by Date
         const sortedDates = Array.from(new Set([...revMap.keys(), ...visitMap.keys()])).sort();
 
         const rData = sortedDates.map(date => ({
@@ -100,11 +168,32 @@ export const Report: React.FC = () => {
 
     return (
         <div className="space-y-8 animate-in fade-in duration-500">
-            <div className="flex justify-between items-center">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                     <h2 className="text-2xl font-bold text-slate-800 dark:text-white">Laporan & Statistik</h2>
                     <p className="text-slate-500 text-sm">Analisis kinerja klinik</p>
                 </div>
+                <div className="flex items-center gap-2">
+                    <input
+                        type="date"
+                        className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-sm"
+                        value={startDate}
+                        onChange={e => setStartDate(e.target.value)}
+                    />
+                    <span className="text-slate-400">-</span>
+                    <input
+                        type="date"
+                        className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-sm"
+                        value={endDate}
+                        onChange={e => setEndDate(e.target.value)}
+                    />
+                    <Button onClick={handlePrint} size="sm" className="gap-2">
+                        <Printer size={16} /> Cetak
+                    </Button>
+                </div>
+            </div>
+
+            <div className="flex justify-end">
                 <button
                     onClick={handleCleanDuplicates}
                     className="text-xs text-red-500 hover:text-red-700 underline"

@@ -9,7 +9,8 @@ import {
     Pill,
     PieChart,
     LogOut,
-    HeartPulse
+    HeartPulse,
+    Users
 } from 'lucide-react';
 
 export const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, onClose }) => {
@@ -26,6 +27,7 @@ export const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ is
         { to: '/payment', label: 'Pembayaran', icon: <CreditCard size={20} />, roles: ['admin', 'kasir'] },
         { to: '/pharmacy', label: 'Apotek & Stok', icon: <Pill size={20} />, roles: ['admin', 'apoteker'] },
         { to: '/report', label: 'Laporan', icon: <PieChart size={20} />, roles: ['admin'] },
+        { to: '/users', label: 'Pengguna', icon: <Users size={20} />, roles: ['admin'] },
     ];
 
     const filteredLinks = links.filter(link => link.roles.includes(role));

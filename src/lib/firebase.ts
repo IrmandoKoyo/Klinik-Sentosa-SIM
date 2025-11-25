@@ -23,6 +23,7 @@ export const COLLECTIONS = {
     TRANSACTIONS: 'transactions',
     MEDICATIONS: 'medications',
     USERS: 'users',
+    INVOICES: 'invoices',
     QUOTAS: 'quotas',
     PATIENTS: 'patients'
 };

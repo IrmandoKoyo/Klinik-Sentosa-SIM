@@ -1,5 +1,5 @@
 import { db, COLLECTIONS } from '../lib/firebase';
-import { collection, getDocs, writeBatch, doc } from 'firebase/firestore';
+import { collection, getDocs, writeBatch, doc, query, where } from 'firebase/firestore';
 import { initialData } from '../data/mockData';
 
 export const seedDatabase = async () => {
@@ -12,22 +12,32 @@ export const seedDatabase = async () => {
 
         // Check if collections are empty
         const queueSnapshot = await getDocs(queueRef);
-        const usersSnapshot = await getDocs(usersRef);
+        // const usersSnapshot = await getDocs(usersRef); // Removed unused
         const patientsSnapshot = await getDocs(patientsRef);
         const medsSnapshot = await getDocs(medsRef);
 
         const batch = writeBatch(db);
         let hasUpdates = false;
 
-        // Seed Users if empty
-        if (usersSnapshot.empty) {
-            console.log('Seeding users...');
-            initialData.users.forEach(item => {
+        // Seed/Update Users
+        console.log('Seeding/Updating users...');
+        for (const user of initialData.users) {
+            // Query by username to avoid duplicates/find existing
+            const q = query(usersRef, where('u', '==', user.u));
+            const querySnapshot = await getDocs(q);
+
+            if (!querySnapshot.empty) {
+                // Update existing
+                const docId = querySnapshot.docs[0].id;
+                const docRef = doc(db, COLLECTIONS.USERS, docId);
+                batch.update(docRef, user as any);
+            } else {
+                // Create new
                 const docRef = doc(usersRef);
-                batch.set(docRef, item);
-            });
-            hasUpdates = true;
+                batch.set(docRef, user);
+            }
         }
+        hasUpdates = true; // Always mark as having updates since we checked/updated users
 
         // Seed Patients if empty
         if (patientsSnapshot.empty) {

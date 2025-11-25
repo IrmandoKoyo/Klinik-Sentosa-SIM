@@ -10,6 +10,7 @@ import { Payment } from './pages/Payment';
 import { Pharmacy } from './pages/Pharmacy';
 import { Report } from './pages/Report';
 import { VisitorPortal } from './pages/VisitorPortal';
+import { UsersPage } from './pages/Users';
 
 // Protected Route Component
 const ProtectedRoute: React.FC<{ children: React.ReactNode; allowedRoles?: string[] }> = ({ children, allowedRoles }) => {
@@ -61,6 +62,11 @@ const AppRoutes: React.FC = () => {
         <Route path="/report" element={
           <ProtectedRoute allowedRoles={['admin']}>
             <Report />
+          </ProtectedRoute>
+        } />
+        <Route path="/users" element={
+          <ProtectedRoute allowedRoles={['admin']}>
+            <UsersPage />
           </ProtectedRoute>
         } />
       </Route>

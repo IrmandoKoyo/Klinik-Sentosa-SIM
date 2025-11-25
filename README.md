@@ -1,124 +1,137 @@
-# 🏥 Klinik Sentosa - Sistem Informasi Manajemen Klinik (SIM)
+# 🏥 Klinik Sentosa - Enterprise Healthcare System
+> **The Ultimate Solution for Modern Clinic Management**
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg) ![React](https://img.shields.io/badge/React-18-blue) ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue) ![Vite](https://img.shields.io/badge/Vite-5.0-purple) ![Firebase](https://img.shields.io/badge/Firebase-Firestore-orange) ![Tailwind](https://img.shields.io/badge/Tailwind-CSS-cyan)
+<div align="center">
 
-**Klinik Sentosa SIM** adalah aplikasi manajemen klinik berbasis web yang dirancang untuk operasional klinik modern tingkat produksi. Sistem ini mengintegrasikan seluruh alur kerja klinik mulai dari pendaftaran pasien, pemeriksaan dokter, pembayaran kasir, hingga pengambilan obat di farmasi secara *real-time* dan efisien.
+![License](https://img.shields.io/badge/License-Enterprise-gold.svg?style=for-the-badge) 
+![React](https://img.shields.io/badge/React_18-20232A?style=for-the-badge&logo=react&logoColor=61DAFB) 
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white) 
+![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black) 
+![Tailwind](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
----
-
-## ✨ Fitur Utama (Production Grade)
-
-### 1. 📋 Pendaftaran Pasien (Registration)
-*   **Penyimpanan Otomatis:** Data pasien baru otomatis tersimpan di database master untuk kunjungan berikutnya.
-*   **Cek Duplikasi:** Mencegah input ganda dengan validasi NIK.
-*   **Antrian Real-time:** Pasien langsung masuk ke antrian dokter setelah mendaftar.
-
-### 2. 👨‍⚕️ Kokpit Dokter (Examination)
-*   **Rekam Medis Super Lengkap:**
-    *   **Tanda Vital (TTV):** Tekanan Darah, Berat Badan, Suhu, Nadi, Pernapasan.
-    *   **Riwayat:** Diagnosa, Keluhan (Anamnesa), Catatan Dokter.
-    *   **Waktu & Petugas:** Mencatat waktu pemeriksaan dan nama dokter secara otomatis.
-*   **Status Antrian:** Pasien tetap terlihat di daftar dengan status "SEDANG DIPERIKSA" selama proses berlangsung.
-*   **E-Resep:** Input resep obat yang terintegrasi langsung dengan stok farmasi.
-
-### 3. 💳 Kasir & Pembayaran (Payment)
-*   **Invoice Profesional:** Cetak struk/invoice pembayaran yang rinci (Jasa Dokter + Obat).
-*   **Integrasi:** Tagihan otomatis muncul setelah dokter menyelesaikan pemeriksaan.
-
-### 4. 💊 Farmasi & Obat (Pharmacy)
-*   **Validasi Stok:** Mencegah pemberian obat jika stok tidak mencukupi.
-*   **Cetak Etiket:** Fitur cetak label obat (etiket) otomatis dengan aturan pakai (misal: 3x1 Sesudah Makan).
-*   **Manajemen Stok:** Pengurangan stok otomatis saat transaksi selesai.
-
-### 5. 📊 Dashboard & Admin
-*   **Reset Antrian:** Fitur admin untuk mereset antrian harian.
-*   **Laporan:** (Coming Soon) Visualisasi data kunjungan dan pendapatan.
+</div>
 
 ---
 
-## 🛠️ Teknologi yang Digunakan
+## 🌟 Overview
+**Klinik Sentosa SIM** adalah **Sistem Informasi Manajemen (SIM) Kelas Enterprise** yang dirancang untuk efisiensi operasional klinik modern. Dibangun dengan teknologi web terkini (**React + TypeScript + Vite**), sistem ini menawarkan performa tinggi, sinkronisasi data *real-time*, dan antarmuka **Glassmorphism** yang elegan.
 
-*   **Frontend:** React (TypeScript) + Vite
-*   **Styling:** Tailwind CSS (Modern UI/UX with Glassmorphism)
-*   **Database:** Google Firebase Firestore (NoSQL Real-time Database)
-*   **Icons:** Lucide React
-*   **Build Tool:** Vite
+Sistem ini mengintegrasikan seluruh alur kerja klinik mulai dari pendaftaran pasien, rekam medis elektronik, manajemen farmasi, hingga pelaporan keuangan dalam satu platform terpadu.
 
 ---
 
-## 💾 Penyimpanan Data (Data Storage)
+## 🎥 Demo Aplikasi (Live Preview)
 
-Aplikasi ini menggunakan **Google Firebase Firestore** sebagai backend serverless. Data tersimpan aman di cloud dan disinkronisasi secara real-time antar pengguna.
-
-**Struktur Koleksi (Collections):**
-1.  `users`: Data pengguna (Admin, Dokter, Kasir, Apoteker) untuk login.
-2.  `patients`: Master data pasien (NIK, Nama, Tgl Lahir, Asuransi).
-3.  `medications`: Master data obat (Nama, Stok, Harga).
-4.  `queue`: Data antrian harian (bersifat sementara, di-reset tiap hari).
-5.  `transactions`: Riwayat transaksi medis lengkap (Arsip permanen).
-
----
-
-## 🚀 Cara Penggunaan (Workflow)
-
-### 1. Persiapan (Admin)
-*   Pastikan stok obat tersedia di menu **Farmasi**.
-*   Pastikan antrian hari sebelumnya sudah di-reset di **Dashboard**.
-
-### 2. Alur Pasien
-1.  **Pendaftaran:** Petugas mendaftarkan pasien. Pasien mendapat nomor antrian.
-2.  **Pemeriksaan:** Dokter memanggil pasien, melakukan pemeriksaan, input TTV, diagnosa, dan resep. Klik "Simpan & Kirim ke Kasir".
-3.  **Pembayaran:** Kasir menerima data tagihan, mencetak invoice, dan memproses pembayaran.
-4.  **Farmasi:** Apoteker menyiapkan obat, mencetak etiket, dan menyerahkan obat ke pasien.
+<div align="center">
+  <h3>✨ Experience the Future of Clinic Management ✨</h3>
+  <br/>
+  <video src="./public/demo.mp4" controls width="100%" style="border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.2);"></video>
+  <br/>
+  <p><i>(Pastikan file <code>demo.mp4</code> tersedia di folder <code>public</code>)</i></p>
+</div>
 
 ---
 
-## 💻 Instalasi & Menjalankan Project
+## 🔄 System Workflow (Alur Kerja Profesional)
+
+Sistem ini dirancang mengikuti standar operasional medis internasional:
+
+### 1️⃣ Pendaftaran (Registration)
+*   **Pasien Datang:** Mendaftar mandiri via **Kiosk (Visitor Portal)** atau dibantu petugas di meja registrasi.
+*   **Smart Search:** Petugas mencari data pasien lama hanya dengan mengetik nama/NIK.
+*   **Tiket Antrian:** Sistem mencetak tiket dengan QR Code dan nomor antrian otomatis.
+
+### 2️⃣ Pemeriksaan Dokter (Examination)
+*   **Pemanggilan:** Dokter memanggil pasien dari dashboard antrian.
+*   **Diagnosa & Tindakan:** Dokter menginput ICD-10, tanda vital, dan tindakan medis.
+*   **E-Resep:** Resep obat dikirim digital ke farmasi (tanpa kertas).
+
+### 3️⃣ Farmasi (Pharmacy)
+*   **Verifikasi:** Apoteker menerima resep digital secara *real-time*.
+*   **Penyiapan Obat:** Stok obat berkurang otomatis saat disiapkan.
+*   **Penyerahan:** Status pasien berubah menjadi "Siap Bayar" setelah obat diserahkan.
+
+### 4️⃣ Pembayaran (Payment)
+*   **Kasir:** Tagihan muncul otomatis (Jasa Dokter + Tindakan + Obat).
+*   **Pelunasan:** Petugas memproses pembayaran dan mencetak struk resmi.
+*   **Selesai:** Data masuk ke laporan pendapatan harian secara instan.
+
+---
+
+## 💎 Fitur Unggulan (Key Features)
+
+### 🚀 1. Real-Time Operational Dashboard
+Pusat komando canggih untuk memantau aktivitas klinik.
+*   **Live Metrics:** Pemantauan *real-time* untuk antrian pasien, pendapatan harian, dan stok kritis.
+*   **Interactive Charts:** Visualisasi tren kunjungan dan pendapatan 7 hari terakhir.
+*   **Quick Access Modals:** Lihat detail antrian dan riwayat transaksi lengkap tanpa berpindah halaman.
+
+### 👨‍⚕️ 2. Intelligent Doctor Station (EMR)
+Modul Rekam Medis Elektronik (EMR) yang komprehensif.
+*   **ICD-10 Integration:** Pencarian kode diagnosa standar internasional yang cepat.
+*   **Smart Vitals:** Input tanda vital dengan format otomatis.
+*   **E-Prescription:** Resep digital terintegrasi langsung dengan stok farmasi.
+*   **Patient History:** Akses riwayat medis pasien sebelumnya dalam satu klik.
+
+### 💊 3. Integrated Pharmacy System
+Manajemen inventaris obat yang ketat dan akurat.
+*   **Auto-Stock Deduction:** Stok berkurang otomatis saat obat diserahkan ke pasien.
+*   **Low Stock Alerts:** Peringatan dini saat stok obat menipis.
+*   **Restock Workflow:** Fitur upload faktur dan penambahan stok yang mudah.
+
+### 💳 4. Secure Payment & Billing
+Sistem kasir yang transparan dan profesional.
+*   **Auto-Invoicing:** Tagihan terbentuk otomatis dari tindakan dokter dan resep obat.
+*   **Professional Receipts:** Cetak struk pembayaran detail dengan logo klinik.
+*   **Transaction History:** Riwayat transaksi lengkap dengan tanggal dan waktu presisi.
+
+---
+
+## 🛠️ Tech Stack
+
+Dibangun dengan standar industri tertinggi untuk performa dan skalabilitas:
+
+| Technology | Role | Description |
+| :--- | :--- | :--- |
+| **React 18** | Frontend | Library UI modern dengan Hooks dan Functional Components. |
+| **TypeScript** | Language | Menjamin keamanan tipe data (*Type Safety*) dan meminimalkan bug. |
+| **Vite** | Build Tool | Waktu *build* dan *hot-reload* super cepat. |
+| **Firebase** | Backend | Database NoSQL Firestore untuk sinkronisasi data *real-time*. |
+| **Tailwind CSS** | Styling | Framework CSS *utility-first* untuk desain responsif dan custom. |
+| **Recharts** | Charts | Library visualisasi data yang responsif dan kustomisasi tinggi. |
+
+---
+
+## 🚀 Getting Started
 
 ### Prasyarat
 *   Node.js (v18+)
-*   Akun Firebase (untuk konfigurasi database)
+*   Akun Google Firebase
 
-### Langkah-langkah
-
+### Instalasi
 1.  **Clone Repository**
     ```bash
     git clone https://github.com/username/klinik-sentosa-sim.git
-    cd klinik-sentosa-sim
     ```
-
 2.  **Install Dependencies**
     ```bash
     npm install
     ```
-
-3.  **Konfigurasi Firebase**
-    *   Buat project di [Firebase Console](https://console.firebase.google.com/).
-    *   Buat file `.env` di root folder.
-    *   Isi konfigurasi sesuai data dari Firebase:
-        ```env
-        VITE_FIREBASE_API_KEY=your_api_key
-        VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
-        VITE_FIREBASE_PROJECT_ID=your_project_id
-        ...
-        ```
-
-4.  **Jalankan Aplikasi (Development)**
+3.  **Setup Environment**
+    Buat file `.env` di root folder dan tambahkan konfigurasi Firebase Anda:
+    ```env
+    VITE_FIREBASE_API_KEY=your_api_key
+    VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+    VITE_FIREBASE_PROJECT_ID=your_project_id
+    ...
+    ```
+4.  **Jalankan Aplikasi**
     ```bash
     npm run dev
     ```
 
-5.  **Build untuk Produksi**
-    ```bash
-    npm run build
-    ```
-
 ---
-
-## 📄 Lisensi
-
-Project ini dilisensikan di bawah **MIT License**. Anda bebas menggunakan, memodifikasi, dan mendistribusikan ulang untuk keperluan pribadi maupun komersial.
-
----
-
-**Dibuat dengan ❤️ oleh Tim Klinik Sentosa**
+<div align="center">
+  <p>© 2025 Klinik Sentosa Systems. All Rights Reserved.</p>
+  <p><i>Developed with ❤️ for Advanced Web Development Course</i></p>
+</div>

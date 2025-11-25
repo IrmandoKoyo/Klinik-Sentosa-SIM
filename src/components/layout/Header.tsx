@@ -4,13 +4,17 @@ import { Menu, Moon, Sun } from 'lucide-react';
 import { formatDate } from '../../utils/helpers';
 
 export const Header: React.FC<{ onMenuClick: () => void }> = ({ onMenuClick }) => {
-    const { currentUser } = useClinic();
+    const { currentUser, updateUser } = useClinic();
     const [isDark, setIsDark] = React.useState(false);
 
     React.useEffect(() => {
-        if (localStorage.getItem('theme') === 'dark') {
+        // Check local storage or system preference
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
             setIsDark(true);
+        } else {
+            document.documentElement.classList.remove('dark');
+            setIsDark(false);
         }
     }, []);
 
@@ -23,6 +27,21 @@ export const Header: React.FC<{ onMenuClick: () => void }> = ({ onMenuClick }) =
             document.documentElement.classList.add('dark');
             localStorage.setItem('theme', 'dark');
             setIsDark(true);
+        }
+    };
+
+    const handleStatusChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const newStatus = e.target.value;
+        if (currentUser && (currentUser as any).firestoreId) {
+            try {
+                // Optimistic update locally if needed, but context should handle it via snapshot
+                await updateUser((currentUser as any).firestoreId, { status: newStatus as any });
+            } catch (error) {
+                console.error("Failed to update status:", error);
+                alert("Gagal mengupdate status. Periksa koneksi internet Anda.");
+            }
+        } else {
+            console.error("User ID missing or invalid for status update");
         }
     };
 
@@ -45,6 +64,25 @@ export const Header: React.FC<{ onMenuClick: () => void }> = ({ onMenuClick }) =
             </div>
 
             <div className="flex items-center space-x-3">
+                {currentUser?.role === 'dokter' && (
+                    <div className="hidden md:flex items-center gap-2 mr-2">
+                        <select
+                            value={currentUser.status || 'Offline'}
+                            onChange={handleStatusChange}
+                            className={`text-xs font-bold py-1 px-2 rounded-lg border-2 outline-none cursor-pointer transition-colors ${currentUser.status === 'Ready' ? 'border-green-500 text-green-600 bg-green-50' :
+                                currentUser.status === 'Tindakan' ? 'border-red-500 text-red-600 bg-red-50' :
+                                    currentUser.status === 'Istirahat' ? 'border-yellow-500 text-yellow-600 bg-yellow-50' :
+                                        'border-slate-300 text-slate-500 bg-slate-50'
+                                }`}
+                        >
+                            <option value="Ready">🟢 Ready</option>
+                            <option value="Tindakan">🔴 Tindakan</option>
+                            <option value="Istirahat">🟡 Istirahat</option>
+                            <option value="Offline">⚫ Offline</option>
+                        </select>
+                    </div>
+                )}
+
                 <button
                     onClick={toggleTheme}
                     className="w-10 h-10 rounded-full bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-500 dark:text-yellow-400 flex items-center justify-center hover:bg-slate-50 transition shadow-sm"

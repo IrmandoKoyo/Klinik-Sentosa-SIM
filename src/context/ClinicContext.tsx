@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
-import type { ClinicData, User, QueueItem, Transaction, Medication, Patient } from '../types';
+import type { ClinicData, User, QueueItem, Transaction, Medication, Patient, Invoice } from '../types';
 import { initialData } from '../data/mockData';
 import { db, COLLECTIONS } from '../lib/firebase';
 import { collection, onSnapshot, addDoc, updateDoc, deleteDoc, doc, query, getDocs, writeBatch } from 'firebase/firestore';
@@ -23,6 +23,18 @@ interface ClinicContextType extends ClinicData {
 
     seedData: () => Promise<void>;
     resetQueue: () => Promise<void>;
+    addUser: (user: User) => Promise<void>;
+    updateUser: (id: string, updates: Partial<User>) => Promise<void>;
+    deleteUser: (id: string) => Promise<void>;
+    addInvoice: (invoice: Invoice) => Promise<void>;
+    processInvoice: (invoiceId: string, items: { name: string; qty: number; price: number }[]) => Promise<void>;
+    doctorStatuses: {
+        id: string;
+        name: string;
+        poli: 'Umum' | 'Gigi' | 'KIA';
+        status: 'Ready' | 'Tindakan' | 'Istirahat' | 'Offline';
+        avatar: string;
+    }[];
 }
 
 const ClinicContext = createContext<ClinicContextType | undefined>(undefined);
@@ -30,14 +42,31 @@ const ClinicContext = createContext<ClinicContextType | undefined>(undefined);
 export const ClinicProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     // Initial state is empty, will be filled by Firestore
     const [data, setData] = useState<ClinicData>({
-        users: initialData.users, // Users still hardcoded for now or from initialData
+        users: initialData.users,
         oldPatients: initialData.oldPatients,
         medications: [],
         queue: [],
         transactions: [],
-        quotas: initialData.quotas
+        quotas: initialData.quotas,
+        invoices: []
     });
-    const [currentUser, setCurrentUser] = useState<User | null>(null);
+    const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+
+    // Derived currentUser to ensure reactivity
+    const currentUser = currentUserId
+        ? data.users.find(u => u.id.toString() === currentUserId || (u as any).firestoreId === currentUserId) || null
+        : null;
+
+    // Derived state for doctor statuses
+    const doctorStatuses = data.users
+        .filter(u => u.role === 'dokter')
+        .map(u => ({
+            id: u.id.toString(),
+            name: u.name,
+            poli: u.poli || 'Umum',
+            status: u.status || 'Ready',
+            avatar: u.avatar || u.name[0]
+        }));
 
     // Subscribe to Firestore collections
     useEffect(() => {
@@ -54,7 +83,7 @@ export const ClinicProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         // Medications Subscription
         const mQuery = query(collection(db, COLLECTIONS.MEDICATIONS));
         const unsubscribeMeds = onSnapshot(mQuery, (snapshot) => {
-            const medsData = snapshot.docs.map(doc => ({ ...doc.data(), firestoreId: doc.id } as unknown as Medication));
+            const medsData = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id, firestoreId: doc.id } as unknown as Medication));
             setData(prev => ({ ...prev, medications: medsData }));
         });
 
@@ -91,17 +120,25 @@ export const ClinicProvider: React.FC<{ children: ReactNode }> = ({ children }) 
             }
         });
 
+        // Invoices Subscription
+        const iQuery = query(collection(db, COLLECTIONS.INVOICES));
+        const unsubscribeInvoices = onSnapshot(iQuery, (snapshot) => {
+            const invoicesData = snapshot.docs.map(doc => ({ ...doc.data(), firestoreId: doc.id } as unknown as Invoice));
+            setData(prev => ({ ...prev, invoices: invoicesData }));
+        });
+
         return () => {
             unsubscribeQueue();
             unsubscribeMeds();
             unsubscribeTrans();
             unsubscribeUsers();
             unsubscribePatients();
+            unsubscribeInvoices();
         };
     }, []);
 
-    const login = (user: User) => setCurrentUser(user);
-    const logout = () => setCurrentUser(null);
+    const login = (user: User) => setCurrentUserId((user as any).firestoreId || user.id.toString());
+    const logout = () => setCurrentUserId(null);
 
     const addQueueItem = async (item: QueueItem) => {
         try {
@@ -219,7 +256,77 @@ export const ClinicProvider: React.FC<{ children: ReactNode }> = ({ children }) 
             resetQueue,
             addMedication,
             updateMedication,
-            deleteMedication
+            deleteMedication,
+            addUser: async (user: User) => {
+                try {
+                    await addDoc(collection(db, COLLECTIONS.USERS), user);
+                } catch (error) {
+                    console.error("Error adding user: ", error);
+                }
+            },
+            updateUser: async (id: string, updates: Partial<User>) => {
+                try {
+                    // Ensure we are updating the correct document
+                    if (!id) throw new Error("Invalid User ID");
+                    const docRef = doc(db, COLLECTIONS.USERS, id);
+                    await updateDoc(docRef, updates);
+                } catch (error) {
+                    console.error("Error updating user: ", error);
+                    throw error; // Re-throw to let caller handle it
+                }
+            },
+            deleteUser: async (id: string) => {
+                try {
+                    const docRef = doc(db, COLLECTIONS.USERS, id);
+                    await deleteDoc(docRef);
+                } catch (error) {
+                    console.error("Error deleting user: ", error);
+                }
+            },
+            addInvoice: async (invoice: Invoice) => {
+                try {
+                    await addDoc(collection(db, COLLECTIONS.INVOICES), invoice);
+                } catch (error) {
+                    console.error("Error adding invoice: ", error);
+                }
+            },
+            processInvoice: async (invoiceId: string, items: { name: string; qty: number; price: number }[]) => {
+                try {
+                    // 1. Update Invoice Status
+                    const invRef = doc(db, COLLECTIONS.INVOICES, invoiceId);
+                    await updateDoc(invRef, { status: 'approved', items });
+
+                    // 2. Update Inventory
+                    const batch = writeBatch(db);
+
+                    for (const item of items) {
+                        // Check if med exists
+                        const existingMed = data.medications.find(m => m.name.toLowerCase() === item.name.toLowerCase());
+
+                        if (existingMed && (existingMed as any).firestoreId) {
+                            const medRef = doc(db, COLLECTIONS.MEDICATIONS, (existingMed as any).firestoreId);
+                            batch.update(medRef, {
+                                stock: existingMed.stock + item.qty,
+                                price: item.price // Update price to latest
+                            });
+                        } else {
+                            const newMedRef = doc(collection(db, COLLECTIONS.MEDICATIONS));
+                            batch.set(newMedRef, {
+                                name: item.name,
+                                stock: item.qty,
+                                price: item.price
+                            });
+                        }
+                    }
+
+                    await batch.commit();
+
+                } catch (error) {
+                    console.error("Error processing invoice: ", error);
+                    throw error;
+                }
+            },
+            doctorStatuses // Add derived property to context value
         }}>
             {children}
         </ClinicContext.Provider>
