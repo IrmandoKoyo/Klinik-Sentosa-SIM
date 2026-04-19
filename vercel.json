@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/sadclass/(.*)",
+      "destination": "/sadclass/index.html"
+    }
+  ]
+}

@@ -21,5 +21,6 @@ export const initialData: ClinicData = {
         { nik: '1111111111111111', name: 'Bayu (Bayi)', dob: '2023-01-01', insurance: 'Umum' }
     ],
     queue: [],
-    transactions: []
+    transactions: [],
+    invoices: []
 };

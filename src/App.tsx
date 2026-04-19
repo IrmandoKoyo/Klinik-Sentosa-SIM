@@ -77,7 +77,7 @@ const AppRoutes: React.FC = () => {
 function App() {
   return (
     <ClinicProvider>
-      <BrowserRouter>
+      <BrowserRouter basename="/sadclass">
         <AppRoutes />
       </BrowserRouter>
     </ClinicProvider>

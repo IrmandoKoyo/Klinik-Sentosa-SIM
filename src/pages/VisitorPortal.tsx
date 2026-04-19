@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useClinic } from '../context/ClinicContext';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
-import { Search, LogOut, Check, User, CreditCard, Pill, Flag, Info, Stethoscope } from 'lucide-react';
+import { Search, LogOut, Check, User, CreditCard, Pill, Info, Stethoscope } from 'lucide-react';
 
 import { normalizeDate, getTodayDateString } from '../utils/helpers';
 

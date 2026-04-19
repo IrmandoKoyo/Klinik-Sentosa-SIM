@@ -3,7 +3,7 @@ import { useClinic } from '../context/ClinicContext';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
-import { TrendingUp, Users, DollarSign, Calendar, Printer, Search } from 'lucide-react';
+import { TrendingUp, Users, DollarSign, Calendar, Printer } from 'lucide-react';
 import { formatCurrency } from '../utils/helpers';
 import { db, COLLECTIONS } from '../lib/firebase';
 import { doc, deleteDoc } from 'firebase/firestore';
