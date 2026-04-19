@@ -8,15 +8,19 @@
   ],
   "rewrites": [
     {
-      "source": "/sadclass/assets/(.*)",
-      "destination": "/assets/$1"
+      "source": "/sadclass/assets/:path*",
+      "destination": "/assets/:path*"
     },
     {
       "source": "/sadclass/favicon-upro.png",
       "destination": "/favicon-upro.png"
     },
     {
-      "source": "/sadclass/(.*)",
+      "source": "/sadclass/:path*",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/sadclass",
       "destination": "/index.html"
     }
   ]
