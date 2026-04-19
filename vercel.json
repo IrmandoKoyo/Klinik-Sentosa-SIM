@@ -1,11 +1,18 @@
 {
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/sadclass/",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
       "source": "/sadclass/assets/:path*",
       "destination": "/assets/:path*"
     },
     {
-      "source": "/sadclass/(.*)",
+      "source": "/sadclass/:path*",
       "destination": "/index.html"
     },
     {
