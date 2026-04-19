@@ -1,8 +1,23 @@
 {
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/sadclass/",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
+      "source": "/sadclass/assets/(.*)",
+      "destination": "/assets/$1"
+    },
+    {
+      "source": "/sadclass/favicon-upro.png",
+      "destination": "/favicon-upro.png"
+    },
+    {
       "source": "/sadclass/(.*)",
-      "destination": "/sadclass/index.html"
+      "destination": "/index.html"
     }
   ]
 }
